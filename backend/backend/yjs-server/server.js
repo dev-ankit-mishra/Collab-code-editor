@@ -18,7 +18,8 @@ const wss = new WebSocket.Server({ noServer: true });
 server.on("upgrade", (request, socket, head) => {
 
     const url = new URL(request.url, `ws://${request.headers.host}`);
-    const token = url.searchParams.get("token");
+    const token = url.searchParams.get("token")
+        || request.headers.authorization?.replace("Bearer ", "");
 
     if (!token) {
         socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
